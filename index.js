@@ -27,9 +27,8 @@ function arrayToNestedObject(obj, keyPath, value) {
     return obj;
 }
 
-Array.prototype.contains = function (element) {
-    return this.indexOf(element) > -1;
-};
+var config = {};
+var relFilePaths = [];
 
 // usage:
 // var configLoader = require('configLoader');
@@ -38,8 +37,6 @@ Array.prototype.contains = function (element) {
 //    console.log(JSON.stringify(config, null, 4));
 //});
 var configLoader = function configLoader(confDir, callback) {
-    var config = {};
-    var relFilePaths = [];
     glob('**/*.conf.*', { cwd: confDir, dot: false }, function (err, _relFilePaths) {
         if (err) {
             callback(err, null);
@@ -47,7 +44,7 @@ var configLoader = function configLoader(confDir, callback) {
         relFilePaths = relFilePaths.concat(_relFilePaths);
         relFilePaths.forEach(function (relFilePath) {
             var fileExtension = path.extname(path.join(confDir, relFilePath));
-            if (['.yaml', '.json', '.csv', '.ini'].contains(fileExtension)) {
+            if (['.yaml', '.json', '.csv', '.ini'].indexOf(fileExtension) > -1) {
                 console.log('reading: ' + relFilePath);
                 try {
                     var config2 = {};
