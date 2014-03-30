@@ -1,0 +1,34 @@
+{
+    "name": "config-loader",
+    "version": "0.0.1",
+    "description": "php middleware for express operating as cgi script for fast php integration on development environments",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "glob": "~3.2.9",
+        "ini": "~1.1.0",
+        "js-yaml": "~3.0.2",
+        "csv-string": "~2.1.1",
+        "deepmerge": "~0.2.7"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/HansHammel/config-loader.git"
+    },
+    "author": {
+        "name": "Hans Hammel"
+    },
+    "maintainers": [
+        {
+            "name": "HansHammel",
+            "email": "oh.schitt@freenet.de"
+        }
+    ],
+    "bugs": {
+        "url": "https://github.com/HansHammel/config-loader/issues"
+    },
+    "homepage": "https://github.com/HansHammel/config-loader"
+}
