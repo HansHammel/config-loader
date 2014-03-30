@@ -16,14 +16,6 @@ or
 Usage
 =====
 
-config files MUST contain a **.conf** in the filename and one of the file extensions **json**, **csv**, **ini**, **js** or **yaml**
-Load all json ini csv and json files from config folder and its subdirectories
-
-    |-config
-      |-winston**.conf.yaml**
-        |-production
-          |-server**.conf.json**
-
 ```javascript
 var configLoader = require('config-loader');
 var config = configLoader(path.join(__dirname, 'config'), function(err, config)
@@ -31,6 +23,22 @@ var config = configLoader(path.join(__dirname, 'config'), function(err, config)
     console.log(JSON.stringify(config, null, 4));
 });
 ```
+
+**config.default**, **config.shared**, **config.production**, **config.development** are reserved (!!!) and map to the default directory structure in the following order:
+
+    /                                   - the config root overwrites all ...
+    /production and /development        - are laoded according to the `process.env.NODE_ENV` vairable and overwrite ...
+    /shared                             - which overwrites  ...
+    /default                            - this is where all/ full default settings should be stored and explained (the default sample configs)
+
+config files **MUST** contain **.conf** in the filename and one of the file extensions **json**, **csv**, **ini**, **js** or **yaml**
+
+**sample** - load all json ini csv and json files from config folder and its subdirectories
+
+    |-config
+      |-winston.conf.yaml
+        |-production
+          |-server.conf.json
 
 Config can be accessed like so:
 **config.winston.**someSettings
@@ -48,6 +56,7 @@ module.exports = config;
 ```
 
 .conf.yaml Sample
+
 ```yaml
 server:
   port: 3000

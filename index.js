@@ -90,7 +90,26 @@ var configLoader = function configLoader(confDir, callback) {
                 }
             }
         });
-        callback(null, config);
+        //remap object according to priorities
+
+        var result = {};
+        // 4. priority - default dir
+        result = config.default ? merge(config.default, result) : result;
+        // 3. priority - shared dir
+        result = config.shared ? merge(config.shared, result) : result;
+        // 2. priority - production dir
+        result = process.env.NODE_ENV == 'procudtion' ? (config.production ? merge(config.production, result) : result) : result;
+        // or
+        // 2. priority - development dir
+        result = process.env.NODE_ENV == 'development' ? (config.development ? merge(config.development, result) : result) : result;
+        // clear
+        config.production = undefined;
+        config.shared = undefined;
+        config.development = undefined;
+        config.default = undefined;
+        // 1. priority - config root and other dirs
+        result = merge(config, result);
+        callback(null, result);
     });
 };
 
