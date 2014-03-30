@@ -44,13 +44,14 @@ var configLoader = function configLoader(confDir, callback) {
         relFilePaths = relFilePaths.concat(_relFilePaths);
         relFilePaths.forEach(function (relFilePath) {
             var fileExtension = path.extname(path.join(confDir, relFilePath));
-            if (['.yaml', '.json', '.csv', '.ini'].indexOf(fileExtension) > -1) {
+            if (['.yaml', '.json', '.csv', '.ini', '.js'].indexOf(fileExtension) > -1) {
                 console.log('reading: ' + relFilePath);
                 try {
                     var config2 = {};
                     var o;
                     var ext;
-                    var f = fs.readFileSync(path.join(confDir, relFilePath), "utf8");
+                    var p = path.join(confDir, relFilePath);
+                    var f = fs.readFileSync(p, "utf8");
                     switch (fileExtension) {
                         case ".yaml":
                             o = yaml.safeLoad(f);
@@ -67,6 +68,10 @@ var configLoader = function configLoader(confDir, callback) {
                         case ".json":
                             o = JSON.parse(f);
                             ext = ".json";
+                            break;
+                        case ".js":
+                            o = require(p);
+                            ext = ".js";
                             break;
                         default:
                             o = {};

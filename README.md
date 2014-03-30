@@ -1,7 +1,7 @@
 config-loader
 =============
 
- hierarchically loads config files (json, yaml ,csv, ini) from directory trees
+ hierarchically loads config files (json, yaml ,csv, ini, js) from directory trees
 
 Installation
 ============
@@ -16,7 +16,7 @@ or
 Usage
 =====
 
-config files MUST contain a **.conf** in the filename and one of the file extensions **json**, **csv**, **ini** or **yaml**
+config files MUST contain a **.conf** in the filename and one of the file extensions **json**, **csv**, **ini**, **js** or **yaml**
 Load all json ini csv and json files from config folder and its subdirectories
 
     |-config
@@ -36,3 +36,22 @@ Config can be accessed like so:
 **config.winston.**someSettings
 **config.production.server.**port
 etc.
+
+.conf.js Sample
+
+```javascript
+var config = {}
+config.twitter = {};
+config.twitter.user_name = process.env.TWITTER_USER || 'username';
+config.twitter.password=  process.env.TWITTER_PASSWORD || 'password';
+module.exports = config;
+```
+
+.conf.yaml Sample
+```yaml
+server:
+  port: 3000
+database:
+  host: 'localhost'
+  port: 27017
+```
