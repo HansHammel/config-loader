@@ -40,10 +40,13 @@ config files **MUST** contain **.conf** in the filename and one of the file exte
         |-production
           |-server.conf.json
 
-Config can be accessed like so:
-**config.winston.**someSettings
-**config.production.server.**port
-etc.
+
+the config can be accessed like so:
+
+```javascript
+console.log(config.winston.someSettings);
+console.log(config.production.server.port);
+```
 
 .conf.js Sample
 
