@@ -27,6 +27,10 @@ function arrayToNestedObject(obj, keyPath, value) {
     return obj;
 }
 
+Array.prototype.contains = function (element) {
+    return this.indexOf(element) > -1;
+};
+
 // usage:
 // var configLoader = require('configLoader');
 //var config = configLoader(path.join(__dirname, 'config'), function(err, config)
@@ -42,37 +46,46 @@ var configLoader = function configLoader(confDir, callback) {
         }
         relFilePaths = relFilePaths.concat(_relFilePaths);
         relFilePaths.forEach(function (relFilePath) {
-            console.log('reading: ' + relFilePath);
-            try {
-                var config2 = {};
-                var o;
-                var f = fs.readFileSync(path.join(confDir, relFilePath), "utf8");
-                switch (path.extname(path.join(confDir, relFilePath))) {
-                    case ".yaml":
-                        o = yaml.safeLoad(f);
-                        break;
-                    case ".ini":
-                        o = ini.parse(f);
-                        break;
-                    case ".csv":
-                        o = CSV.parse(f);
-                        break;
-                    case ".json":
-                        o = JSON.parse(f);
-                        break;
-                    default:
-                        o = {};
+            var fileExtension = path.extname(path.join(confDir, relFilePath));
+            if (['.yaml', '.json', '.csv', '.ini'].contains(fileExtension)) {
+                console.log('reading: ' + relFilePath);
+                try {
+                    var config2 = {};
+                    var o;
+                    var ext;
+                    var f = fs.readFileSync(path.join(confDir, relFilePath), "utf8");
+                    switch (fileExtension) {
+                        case ".yaml":
+                            o = yaml.safeLoad(f);
+                            ext = ".yaml";
+                            break;
+                        case ".ini":
+                            o = ini.parse(f);
+                            ext = ".ini";
+                            break;
+                        case ".csv":
+                            o = CSV.parse(f);
+                            ext = ".csv";
+                            break;
+                        case ".json":
+                            o = JSON.parse(f);
+                            ext = ".json";
+                            break;
+                        default:
+                            o = {};
+                            ext = "";
+                    }
+                    var folders = path.dirname(relFilePath).split('/');
+                    var firstElementName = path.basename(relFilePath, '.conf' + ext);
+                    var firstElement = { };
+                    firstElement[firstElementName] = o;
+                    config2 = arrayToNestedObject(config2, folders, firstElement);
+                    config = merge(config2, config);
+                } catch (err) {
+                    console.log('ERROR: ' + err);
+                    //callback(err, null);
+                } finally {
                 }
-                var folders = path.dirname(relFilePath).split('/');
-                var firstElementName = path.basename(relFilePath, '.conf.yaml');
-                var firstElement = { };
-                firstElement[firstElementName] = o;
-                config2 = arrayToNestedObject(config2, folders, firstElement);
-                config = merge(config2, config);
-            } catch (err) {
-                console.log('ERROR: ' + err);
-                //callback(err, null);
-            } finally {
             }
         });
         callback(null, config);
