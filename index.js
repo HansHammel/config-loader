@@ -98,10 +98,11 @@ var configLoader = function configLoader(confDir, callback) {
         // 3. priority - shared dir
         result = config.shared ? merge(config.shared, result) : result;
         // 2. priority - production dir
-        result = process.env.NODE_ENV == 'procudtion' ? (config.production ? merge(config.production, result) : result) : result;
+        console.log(process.env.NODE_ENV);
+        if (process.env.NODE_ENV === 'production') result = config.production ? merge(config.production, result) : result;
         // or
         // 2. priority - development dir
-        result = process.env.NODE_ENV == 'development' ? (config.development ? merge(config.development, result) : result) : result;
+        if (process.env.NODE_ENV === 'development') result = config.development ? merge(config.development, result) : result;
         // clear
         config.production = undefined;
         config.shared = undefined;
