@@ -17,8 +17,9 @@ Usage
 =====
 
 ```javascript
+var path = require('path');
 var configLoader = require('config-loader');
-var config = configLoader(path.join(__dirname, 'config'), function(err, config)
+configLoader(path.join(__dirname, 'config'), function(err, config)
 {
     console.log(JSON.stringify(config, null, 4));
 });

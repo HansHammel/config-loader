@@ -1,0 +1,9 @@
+{
+  "nothing": ["to", "see", "here"],
+  "except": {
+    "this": true,
+    "string": "string",
+    "number": 10,
+    "boolean": false
+  }
+}

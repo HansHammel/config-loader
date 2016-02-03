@@ -1,0 +1,6 @@
+test:
+  the:
+    best: 'coffee'
+string: "string"
+number: 10
+boolean: false

@@ -8,6 +8,35 @@ var yaml = require('js-yaml');
 var ini = require('ini');
 var csv = require('csv-string');
 
+function isInt(n){
+    return Number(n) === n && n % 1 === 0;
+}
+
+function isFloat(n){
+    return n === Number(n) && n % 1 !== 0;
+}
+
+var normalizeTypes = function(value) {
+    if (typeof value === "string"){
+        if (value.toLowerCase() === "true") {
+            return true;
+        } else if (value.toLowerCase() === "false") {
+            return false;
+        } else if (Number(value) !== "NaN") {
+            if (isInt(value)) {
+                return parse.int(value)
+            } else if (isFloat(value)) {
+                return parse.float(value)
+            } else return value;
+        } else return value;
+    } else return value;
+};
+
+
+var traverse = require('traverse');
+
+
+
 function arrayToNestedObject(obj, keyPath, value) {
     lastKeyIndex = keyPath.length - 1;
     for (var i = 0; i < lastKeyIndex; ++i) {
@@ -37,6 +66,7 @@ var relFilePaths = [];
 //    console.log(JSON.stringify(config, null, 4));
 //});
 var configLoader = function configLoader(confDir, callback) {
+    if(!fs.existsSync(confDir)) {throw new Error('Path '+confDir+' not found');} else
     glob('**/*.conf.*', { cwd: confDir, dot: false }, function (err, _relFilePaths) {
         if (err) {
             callback(err, null);
@@ -45,7 +75,7 @@ var configLoader = function configLoader(confDir, callback) {
         relFilePaths.forEach(function (relFilePath) {
             var fileExtension = path.extname(path.join(confDir, relFilePath));
             if (['.yaml', '.json', '.csv', '.ini', '.js'].indexOf(fileExtension) > -1) {
-                console.log('reading: ' + relFilePath);
+                //console.log('reading: ' + relFilePath);
                 try {
                     var config2 = {};
                     var o;
@@ -59,10 +89,16 @@ var configLoader = function configLoader(confDir, callback) {
                             break;
                         case ".ini":
                             o = ini.parse(f);
+                            traverse(o).forEach(function (x) {
+                                this.update(normalizeTypes(x));
+                            });
                             ext = ".ini";
                             break;
                         case ".csv":
-                            o = CSV.parse(f);
+                            o = csv.parse(f);
+                            traverse(o).forEach(function (x) {
+                                this.update(normalizeTypes(x));
+                            });
                             ext = ".csv";
                             break;
                         case ".json":
@@ -98,16 +134,16 @@ var configLoader = function configLoader(confDir, callback) {
         // 3. priority - shared dir
         result = config.shared ? merge(config.shared, result) : result;
         // 2. priority - production dir
-        console.log(process.env.NODE_ENV);
+        //console.log(process.env.NODE_ENV);
         if (process.env.NODE_ENV === 'production') result = config.production ? merge(config.production, result) : result;
         // or
         // 2. priority - development dir
         if (process.env.NODE_ENV === 'development') result = config.development ? merge(config.development, result) : result;
         // clear
-        config.production = undefined;
-        config.shared = undefined;
-        config.development = undefined;
-        config.default = undefined;
+        delete config.production;
+        delete config.shared;
+        delete config.development;
+        delete config.default;
         // 1. priority - config root and other dirs
         result = merge(config, result);
         callback(null, result);
