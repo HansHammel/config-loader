@@ -1,6 +1,15 @@
 config-loader
 =============
 
+[![Inline docs](http://inch-ci.org/github/HansHammel/config-loader.svg?branch=master)](http://inch-ci.org/github/HansHammel/config-loader)
+[![star this repo](http://githubbadges.com/star.svg?user=HansHammel&repo=config-loader&style=flat&color=fff&background=007ec6)](https://github.com/HansHammel/config-loader)
+[![fork this repo](http://githubbadges.com/fork.svg?user=HansHammel&repo=config-loader&style=flat&color=fff&background=007ec6)](https://github.com/HansHammel/config-loader/fork)
+[![david dependency](https://img.shields.io/david/HansHammel/config-loader.svg)](https://david-dm.org/HansHammel/config-loader)
+[![david devDependency](https://img.shields.io/david/dev/HansHammel/config-loader.svg)](https://david-dm.org/HansHammel/config-loader)
+[![david optionalDependency](https://img.shields.io/david/optional/HansHammel/config-loader.svg)](https://david-dm.org/HansHammel/config-loader)
+[![david peerDependency](https://img.shields.io/david/peer/HansHammel/config-loader.svg)](https://david-dm.org/HansHammel/config-loader)
+[![Known Vulnerabilities](https://snyk.io/test/github/HansHammel/config-loader/badge.svg)](https://snyk.io/test/github/HansHammel/config-loader)
+
  hierarchically loads config files (json, yaml ,csv, ini, js) from directory trees
 
 Installation
